@@ -22,6 +22,5 @@ export const getDayMonth = (date: string) => {
 };
 
 export const getDayMontyhYear = (date: string | Date) => {
-  console.log(date)
   return new Date(date).toLocaleString("pt-BR").split(',')[0];
 }
