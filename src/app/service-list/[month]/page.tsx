@@ -18,25 +18,25 @@ export default function ServiceListPage() {
   const { month } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [services, setServices] = useState<Service[]>([]);
-
+  
   useEffect(() => {
+    const getData = async () => {
+      setServices([]);
+      setLoading(true);
+  
+      const response = await fetch(`/api/get-services?month=${month}`);
+      const data = await response.json();
+  
+      const sortedServices = data.services.sort((a: Service, b: Service) =>
+        a.data! > b.data! ? -1 : 1
+      );
+  
+      setServices(sortedServices);
+      setLoading(false);
+    };
+
     getData();
-  }, []);
-
-  const getData = async () => {
-    setServices([]);
-    setLoading(true);
-
-    const response = await fetch(`/api/get-services?month=${month}`);
-    const data = await response.json();
-
-    const sortedServices = data.services.sort((a: Service, b: Service) =>
-      a.data! > b.data! ? -1 : 1
-    );
-
-    setServices(sortedServices);
-    setLoading(false);
-  };
+  }, [month]);
 
   return (
     <div>
@@ -54,6 +54,7 @@ export default function ServiceListPage() {
       <div className="mt-6">
         {services.map((service, index) => (
           <Accordion
+            key={service.numeroProtocolo}
             className="mt-2 border border-indigo-200"
             elevation={0}
             defaultExpanded={index === 0}

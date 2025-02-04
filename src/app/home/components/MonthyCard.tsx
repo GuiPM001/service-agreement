@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Service } from "../../types/Service";
 import { dateToIsoString, getMonthYear } from "../../utils/dateUtils";
 import FileDownloadRoundedIcon from "@mui/icons-material/FileDownloadRounded";
-import { generateServicesSheet } from "../../utils/sheetUtil";
 
 type MonthyCardProps = {
   date: Date;
