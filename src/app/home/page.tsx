@@ -32,7 +32,7 @@ export default function Home() {
   const fetchMonthlyData = async (date: string) => {
     setLoading(true);
 
-    const response = await fetch(`/api/get-services?month=${date}`);
+    const response = await fetch(`/app/api/get-services?month=${date}`);
     const data = await response.json();
     setServices(data.services);
 

@@ -29,7 +29,7 @@ export default function MonthyCard({
   const getSheet = async () => {
     setSheetLoading(true);
 
-    const response = await fetch("/api/generate-sheet", {
+    const response = await fetch("/app/api/generate-sheet", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ services }),

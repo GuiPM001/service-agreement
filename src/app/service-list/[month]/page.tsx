@@ -24,7 +24,7 @@ export default function ServiceListPage() {
       setServices([]);
       setLoading(true);
   
-      const response = await fetch(`/api/get-services?month=${month}`);
+      const response = await fetch(`/app/api/get-services?month=${month}`);
       const data = await response.json();
   
       const sortedServices = data.services.sort((a: Service, b: Service) =>
