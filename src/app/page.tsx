@@ -1,3 +1,5 @@
-export default function Page() {
-  return <div>oi</div>;
+import Home from "./home/page";
+
+export default function Main() {
+  return <Home />;
 }
