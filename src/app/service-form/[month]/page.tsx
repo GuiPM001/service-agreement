@@ -57,7 +57,7 @@ export default function ServiceFormPage() {
       valorTotal: removeSeparator(data.valorTotal),
     };
 
-    const response = await fetch("/app/api/save-service", {
+    const response = await fetch("/api/save-service", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ month, newService: formattedForm }),
