@@ -24,11 +24,13 @@ type BasicSelectProps = ControllerRenderProps & {
 };
 
 export default function BasicSelect(props: BasicSelectProps) {
-  return (
-    <FormControl fullWidth size="small" error={props.error}>
-      <InputLabel id={props.name}>{props.label}</InputLabel>
+  const hasValue = props.value !== null;
 
-      <Select id={props.name} {...props}>
+  return (
+    <FormControl fullWidth size="small" error={props.error} >
+      <InputLabel id={props.name} shrink={hasValue}>{props.label}</InputLabel>
+
+      <Select id={props.name} {...props} label={hasValue ? props.label : ""} >
         {props.options.map((option: Option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}

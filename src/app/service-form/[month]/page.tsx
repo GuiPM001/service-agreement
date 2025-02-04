@@ -86,13 +86,14 @@ export default function ServiceFormPage() {
   };
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-8">
       <PageTitle title="Novo acionamento" backButton />
 
       <ServiceForm
         control={control}
         errors={errors}
         loading={loading}
+        setValue={setValue}
         resetForm={() => reset()}
         handleSubmit={handleSubmit(onSubmit)}
         month={month as string}

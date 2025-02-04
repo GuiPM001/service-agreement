@@ -1,8 +1,10 @@
+import { Dayjs } from "dayjs";
+
 export type Service = {
   numeroProtocolo: number | string;
   tipoAcionamento: TipoAcionamento | null;
   responsavel?: string;
-  data: string | Date | null;
+  data: string | Date | null | Dayjs;
   origem: string;
   destino: string;
   modeloVeiculo: string;

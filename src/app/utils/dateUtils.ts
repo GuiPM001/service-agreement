@@ -11,7 +11,7 @@ export const getMonthYear = (date: Date) => {
 };
 
 export const getMonthYearForString = (dateString: string) => {
-  const date = dateString.split('-');
+  const date = dateString.split("-");
   return `${date[1]}/${date[0]}`;
 };
 
@@ -22,5 +22,13 @@ export const getDayMonth = (date: string) => {
 };
 
 export const getDayMontyhYear = (date: string | Date) => {
-  return new Date(date).toLocaleString("pt-BR").split(',')[0];
-}
+  return new Date(date).toLocaleString("pt-BR").split(",")[0];
+};
+
+export const getDateByString = (dataString?: string) => {
+  if (!dataString) return null;
+
+  const [day, month, year] = dataString.split("/");
+
+  return new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
+};

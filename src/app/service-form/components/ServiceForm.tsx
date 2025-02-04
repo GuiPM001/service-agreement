@@ -1,10 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { Button, CircularProgress, TextField } from "@mui/material";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Control, Controller, FieldErrors } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldErrors,
+  UseFormSetValue,
+} from "react-hook-form";
 import { Service, TipoAcionamento } from "@/app/types/Service";
 import MoneyInput from "@/app/components/MoneyInput";
 import FormSection from "@/app/components/FormSection";
@@ -12,11 +17,14 @@ import BasicSelect from "@/app/components/BasicSelect";
 import SaveIcon from "@mui/icons-material/Save";
 import { ptBR } from "@mui/x-date-pickers/locales";
 import dayjs from "dayjs";
+import { extractInfo } from "../utils/extractInfo";
+import { getDateByString } from "@/app/utils/dateUtils";
 
 type ServiceFormProps = {
   loading: boolean;
   control: Control<Service, any>;
   errors: FieldErrors<Service>;
+  setValue: UseFormSetValue<Service>;
   resetForm: () => void;
   handleSubmit: () => void;
   month: string;
@@ -26,10 +34,29 @@ export default function ServiceForm({
   control,
   errors,
   resetForm,
+  setValue,
   loading,
   handleSubmit,
   month,
 }: ServiceFormProps) {
+  const inputProtocoloRef = useRef<HTMLInputElement>(null);
+
+  const getTextData = (event: React.ClipboardEvent<HTMLDivElement>) => {
+    const text = event.clipboardData.getData("text");
+
+    const data = extractInfo(text);
+
+    setValue("numeroProtocolo", Number(data.numeroProtocolo));
+    setValue("tipoAcionamento", data.tipoAcionamento);
+    setValue("data", dayjs(getDateByString(data.data as string)));
+    setValue("placaVeiculo", data.placaVeiculo);
+    setValue("modeloVeiculo", data.modeloVeiculo);
+    setValue("origem", data.origem);
+    setValue("destino", data.destino);
+
+    inputProtocoloRef.current!.blur();
+  };
+
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
       <FormSection title="Acionamento">
@@ -39,9 +66,11 @@ export default function ServiceForm({
             control={control}
             render={({ field }) => (
               <TextField
+                inputRef={inputProtocoloRef}
                 size="small"
                 type="number"
                 label="Nº protocolo"
+                onPaste={getTextData}
                 {...field}
               />
             )}
@@ -76,7 +105,6 @@ export default function ServiceForm({
                   label="Data"
                   format="DD/MM/YYYY"
                   orientation="landscape"
-                  // defaultValue={dayjs(new Date())}
                   slotProps={{
                     textField: {
                       size: "small",
