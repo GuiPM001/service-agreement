@@ -36,7 +36,7 @@ export default function MonthyCard({
     const response = await fetch("/api/generate-sheet", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sortedServices }),
+      body: JSON.stringify({ date, services: sortedServices }),
     });
 
     const blob = await response.blob();

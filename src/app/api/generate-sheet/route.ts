@@ -1,6 +1,6 @@
 import * as ExcelJS from "exceljs";
 import { NextRequest, NextResponse } from "next/server";
-import { getDayMonth } from "@/app/utils/dateUtils";
+import { getDayMonth, getMonthYear } from "@/app/utils/dateUtils";
 import { Service, TipoAcionamento } from "@/app/types/Service";
 import { base64Image } from "./base64Image";
 
@@ -8,13 +8,14 @@ export async function POST(req: NextRequest) {
   try {
     const requestBody = await req.json();
     const services = requestBody.services || [];
+    const date = requestBody.date;
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Página1");
 
     addImage(workbook, worksheet);
 
-    createHeader(worksheet);
+    createHeader(worksheet, date);
     populateSheet(services, worksheet);
     addTotalRow(services, worksheet);
     setColumnWidth(worksheet);
@@ -23,7 +24,8 @@ export async function POST(req: NextRequest) {
     return new NextResponse(buffer, {
       status: 200,
       headers: {
-        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "Content-Disposition": 'attachment; filename="planilha.xlsx"',
       },
     });
@@ -35,14 +37,15 @@ export async function POST(req: NextRequest) {
   }
 }
 
-const createHeader = (worksheet: ExcelJS.Worksheet) => {
-  worksheet.mergeCells("B1:M1");
+const createHeader = (worksheet: ExcelJS.Worksheet, date: Date) => {
+  worksheet.mergeCells("A1:B1");
+  worksheet.mergeCells("C1:M1");
   worksheet.mergeCells("D2:E2");
   worksheet.mergeCells("F2:H2");
   worksheet.mergeCells("I2:M2");
   worksheet.mergeCells("A2:C2");
 
-  worksheet.getCell("B1").value =
+  worksheet.getCell("C1").value =
     "PLANILHA DE FATURAMENTO - ASSISTÊNCIA / SERVIÇOS";
 
   const firstRow = worksheet.getRow(1);
@@ -67,7 +70,10 @@ const createHeader = (worksheet: ExcelJS.Worksheet) => {
 
   worksheet.getCell("A2").value = "Prestador: Reboque Prime";
   worksheet.getCell("D2").value = "CNPJ: 56.987.636/0001-32";
-  worksheet.getCell("F2").value = "Mês/ano de referência: 01/2025";
+  worksheet.getCell("F2").value = `Mês/ano de referência: ${getMonthYear(
+    new Date(date),
+    true
+  )}`;
   worksheet.getCell("I2").value = "Data de envio SICAR: ";
   const row = worksheet.getRow(2);
   row.height = 21;
@@ -138,7 +144,10 @@ const populateSheet = (services: Service[], worksheet: ExcelJS.Worksheet) => {
 
 const addTotalRow = (services: Service[], worksheet: ExcelJS.Worksheet) => {
   const totalKm = services.reduce((acc, s) => s.valorNormal + acc, 0);
-  const totalAditional = services.reduce((acc, s) => s.valorTotal! - s.valorNormal + acc, 0);
+  const totalAditional = services.reduce(
+    (acc, s) => s.valorTotal! - s.valorNormal + acc,
+    0
+  );
   const totalAmount = services.reduce((acc, s) => s.valorTotal! + acc, 0);
 
   const row = worksheet.addRow([

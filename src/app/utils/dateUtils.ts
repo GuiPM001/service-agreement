@@ -4,9 +4,12 @@ export const dateToIsoString = (date: Date) => {
     .split("T")[0];
 };
 
-export const getMonthYear = (date: Date) => {
+export const getMonthYear = (date: Date, numericMonth?: boolean) => {
   return date
-    .toLocaleDateString("pt-BR", { month: "long", year: "numeric" })
+    .toLocaleDateString("pt-BR", {
+      month: numericMonth ? "numeric" : "long",
+      year: "numeric",
+    })
     .replace(" de ", "/");
 };
 
