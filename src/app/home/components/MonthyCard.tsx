@@ -30,7 +30,7 @@ export default function MonthyCard({
     setSheetLoading(true);
 
     const sortedServices = services.sort((a: Service, b: Service) =>
-      a.data! > b.data! ? -1 : 1
+      a.data! < b.data! ? -1 : 1
     );
 
     const response = await fetch("/api/generate-sheet", {

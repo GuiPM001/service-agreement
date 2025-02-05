@@ -132,8 +132,13 @@ const populateSheet = (services: Service[], worksheet: ExcelJS.Worksheet) => {
 
     row.height = 21;
     row.eachCell((cell, colNumber) => {
-      cell.alignment = { wrapText: true, horizontal: "center" };
+      if (![7, 8, 9].includes(colNumber)) {
+        cell.alignment = { wrapText: true, horizontal: "center" };
+      }
+
       addBorder(cell);
+
+      if (colNumber === 5) cell.numFmt = "0";
 
       if ([11, 12].includes(colNumber)) cell.numFmt = "#,##0.00";
 
@@ -202,7 +207,7 @@ const setColumnWidth = (worksheet: ExcelJS.Worksheet) => {
   worksheet.getColumn("D").width = 18;
   worksheet.getColumn("E").width = 16;
   worksheet.getColumn("F").width = 12;
-  worksheet.getColumn("G").width = 14;
+  worksheet.getColumn("G").width = 16;
   worksheet.getColumn("H").width = 24;
   worksheet.getColumn("I").width = 21;
   worksheet.getColumn("J").width = 10;

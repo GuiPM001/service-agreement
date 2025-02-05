@@ -12,15 +12,15 @@ import { NotificationType } from "@/app/types/Notification";
 
 export default function ServiceFormPage() {
   const initialState: Service = {
-    numeroProtocolo: '',
+    numeroProtocolo: "",
     tipoAcionamento: null,
     data: null,
     origem: "",
     destino: "",
     modeloVeiculo: "",
     placaVeiculo: "",
-    kmTotal: null,
-    kmAdicional: null,
+    kmTotal: 0,
+    kmAdicional: 0,
     valorNormal: 165,
     valorTotal: 165,
   };
@@ -53,6 +53,7 @@ export default function ServiceFormPage() {
     setLoading(true);
     const formattedForm: Service = {
       ...data,
+      numeroProtocolo: Number(data.numeroProtocolo),
       valorNormal: removeSeparator(data.valorNormal),
       valorTotal: removeSeparator(data.valorTotal),
     };
