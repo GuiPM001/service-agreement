@@ -65,8 +65,8 @@ export default function ServiceListPage() {
                   <span className="font-semibold text-gray-700">
                     Protocolo:{" "}
                   </span>
-                  {service.numeroProtocolo || "Sem protocolo"} |{" "}
-                  {getDayMontyhYear(service.data!)}
+                  {service.numeroProtocolo || service.responsavel} |{" "}
+                  {getDayMontyhYear(service.data as string)}
                 </span>
                 <div className="flex flex-row">
                   <InfoContainer label="Veículo" info={service.modeloVeiculo} />
